@@ -27,34 +27,46 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
-        askPermission();
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_maps);
+            askPermission();
+            // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.map);
+            mapFragment.getMapAsync(this);
+        } catch (NullPointerException ex){
+            System.out.println(ex.getMessage());
+        }
     }
 
     private void askPermission() {
             final int REQUEST_CODE = 13;
-            String cameraPermissin = Manifest.permission.CAMERA;
+            String locationPermission = Manifest.permission.ACCESS_FINE_LOCATION;
+            String cameraPermission = Manifest.permission.CAMERA;
             String readContactsPermission = Manifest.permission.READ_CONTACTS;
-            //String readExternalStoragePermission = Manifest.permission.READ_EXTERNAL_STORAGE;
+            String readExternalStoragePermission = Manifest.permission.READ_EXTERNAL_STORAGE;
+            String calendarPermission = Manifest.permission.READ_CALENDAR;
 
             List<String> permissionList = new ArrayList<>();
 
-            if (!hasPermission(cameraPermissin)){
-                permissionList.add(cameraPermissin);
+            if (!hasPermission(locationPermission)){
+                permissionList.add(locationPermission);
+            }
+            if (!hasPermission(cameraPermission)){
+                permissionList.add(cameraPermission);
             }
             if (!hasPermission(readContactsPermission)){
                 permissionList.add(readContactsPermission);
             }
-            //if (!hasPermission(readExternalStoragePermission)){
-            //    permissionList.add(readExternalStoragePermission);
-            //}
+            if (!hasPermission(readExternalStoragePermission)){
+                permissionList.add(readExternalStoragePermission);
+            }
+            if (!hasPermission(calendarPermission)){
+                permissionList.add(calendarPermission);
+            }
             if (!permissionList.isEmpty()){
-                String[] permissions = permissionList.toArray(new String[2]);
+                String[] permissions = permissionList.toArray(new String[5]);
                 ActivityCompat.requestPermissions(this,permissions,REQUEST_CODE);
             }
     }
